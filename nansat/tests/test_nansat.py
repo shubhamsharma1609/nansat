@@ -281,6 +281,8 @@ class NansatTest(unittest.TestCase):
         n.resize(0.5, eResampleAlg=0)
         self.assertLess(np.nanmax(n[1]), 60) # this is SAR incidence angles..
         self.assertTrue(np.isnan(n[1]).any())
+        print '0'
+        print n[1]
 
     def test_resize_nan_alg1(self):
         n = Nansat(self.test_file_nan, logLevel=40)
@@ -291,6 +293,8 @@ class NansatTest(unittest.TestCase):
         n.resize(0.5, eResampleAlg=1)
         self.assertLess(np.nanmax(n[1]), 60) # this is SAR incidence angles..
         self.assertTrue(np.isnan(n[1]).any())
+        print '1'
+        print n[1]
 
     def test_resize_nan_alg2(self):
         n = Nansat(self.test_file_nan, logLevel=40)
@@ -301,6 +305,8 @@ class NansatTest(unittest.TestCase):
         n.resize(0.5, eResampleAlg=2)
         self.assertLess(np.nanmax(n[1]), 60) # this is SAR incidence angles..
         self.assertTrue(np.isnan(n[1]).any())
+        print '2'
+        print n[1]
 
     def test_resize_nan_alg3(self):
         n = Nansat(self.test_file_nan, logLevel=40)
@@ -311,6 +317,8 @@ class NansatTest(unittest.TestCase):
         n.resize(0.5, eResampleAlg=3)
         self.assertLess(np.nanmax(n[1]), 60) # this is SAR incidence angles..
         self.assertTrue(np.isnan(n[1]).any())
+        print '3'
+        print n[1]
 
     def test_resize_nan_alg4(self):
         n = Nansat(self.test_file_nan, logLevel=40)
@@ -321,6 +329,8 @@ class NansatTest(unittest.TestCase):
         n.resize(0.5, eResampleAlg=4)
         self.assertLess(np.nanmax(n[1]), 60) # this is SAR incidence angles..
         self.assertTrue(np.isnan(n[1]).any())
+        print '4'
+        print n[1]
 
     def test_get_GDALRasterBand(self):
         n = Nansat(self.test_file_gcps, logLevel=40)
@@ -415,7 +425,7 @@ class NansatTest(unittest.TestCase):
 
         self.assertTrue(os.path.exists(tmpfilename))
 
-    def test_write_figure_clim(self):
+    def test_write_figure_leg(self):
         n1 = Nansat(self.test_file_stere, logLevel=40)
         tmpfilename = os.path.join(ntd.tmp_data_path,
                                    'nansat_write_figure_legend.png')

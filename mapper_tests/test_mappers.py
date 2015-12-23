@@ -55,10 +55,9 @@ class TestDataForTestingMappers(unittest.TestCase):
 
 
 class TestAllMappers(object):
-    def test_automatic_mapper(self):
+    def atest_automatic_mapper(self):
         ''' Should open all downloaded files with automatically selected mapper '''
         testData = DataForTestingMappers()
-        testData.download_all_test_data()
         for mapper in testData.mapperData:
             mapperFiles = testData.mapperData[mapper]
             for mapperFile in mapperFiles:
@@ -85,18 +84,25 @@ class TestAllMappers(object):
         n = Nansat(mapperFile, mapperName=mapperName)
         assert type(n) == Nansat
 
-class TestRadarsat(object):
-    def test_all_rs2_files(self):
-        testData = DataForTestingMappers()
-        testData.download_all_test_data()
-        for rsfile in testData.mapperData['radarsat2']:
-            yield self.test_incidence_angle, rsfile
-            yield self.test_export, rsfile
-            yield self.test_export_band, rsfile
-            #yield self.test_export2thredds, rsfile
-            yield self.test_resize, rsfile
 
-    def test_export2thredds(self, rsfile):
+class TestRadarsat(object):
+
+    def test_all_rs2_files(self):
+        print "RUNNING"
+        testData = DataForTestingMappers()
+        rs2Index = [i for i,
+                    v in enumerate(testData.mapperData) if v[1] == 'radarsat2']
+        print rs2Index
+        for index in rs2Index:
+            rsfile = testData.mapperData[index]
+            yield self.incidence_angle, rsfile
+            yield self.export, rsfile
+            yield self.export_band, rsfile
+            #yield self.export2thredds, rsfile
+            yield self.resize, rsfile
+        assert False
+
+    def export2thredds(self, rsfile):
         ncfile = 'test.nc'
         orig = Nansat(rsfile)
         orig.resize(0.05, eResampleAlg=1)
@@ -107,7 +113,7 @@ class TestRadarsat(object):
         np.testing.assert_allclose(inc0, inc1)
         os.unlink(ncfile)
 
-    def test_export_band(self, rsfile):
+    def export_band(self, rsfile):
         orig = Nansat(rsfile)
         ncfile = 'test.nc'
         orig.export(ncfile, bands=[orig._get_band_number('incidence_angle')])
@@ -117,7 +123,7 @@ class TestRadarsat(object):
         np.testing.assert_allclose(inc0, inc1)
         os.unlink(ncfile)
 
-    def test_export(self, rsfile):
+    def export(self, rsfile):
         ncfile = 'test.nc'
         orig = Nansat(rsfile)
         orig.resize(0.05, eResampleAlg=1)
@@ -130,7 +136,7 @@ class TestRadarsat(object):
         # TODO: add assertion that lon0,lat0=lon1,lat1
         os.unlink(ncfile)
 
-    def test_incidence_angle(self, rsfile):
+    def incidence_angle(self, rsfile):
         n = Nansat(rsfile)
         # Add/subtract 0.5 degrees to max/min incidence angles as it happens
         # that the actual max/min is not exactly within the limits provided in
@@ -141,7 +147,7 @@ class TestRadarsat(object):
         assert np.all(np.greater_equal(inc[np.isnan(inc)==False], inc_min))
         assert np.all(np.less_equal(inc[np.isnan(inc)==False], inc_max))
 
-    def test_resize(self, rsfile):
+    def resize(self, rsfile):
         n = Nansat(rsfile)
         inc_max = float(n.get_metadata()['FAR_RANGE_INCIDENCE_ANGLE'])+0.5
         n.resize(0.5, eResampleAlg=0)

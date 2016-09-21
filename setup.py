@@ -120,7 +120,7 @@ except Exception as e:
          
           
     print ('Error details follow:')
-    print repr(e)
+    print (repr(e))
     skip_compile = True
 
 #----------------------------------------------------------------------------#
